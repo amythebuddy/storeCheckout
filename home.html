@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="checkout.js" defer></script>
+</head>
+<body>
+    <div id = "home">
+        <section>
+            <h1>Cashier Checkout</h1>
+            <span>Scan Barcode:</span>
+            <input type= "text" name= "barcode" id= "barcode" placeholder= "Scan here">
+            <br>
+            <span>Quantity:</span>
+            <input type= "number" name = "quantity" id = "quantity">
+            <br>
+            <button id = "add">Add to Cart</button>
+            <hr>
+        </section>
+        <section>
+            <h2>Cart</h2>
+            <table id = "table">
+                <th>Item</th>
+                <th>Price</th>
+                <th>Quantity</th>
+            </table>
+            <p id = "total">Total: </p>
+            <button id = "checkOut">Check Out</button>
+            <p id = "grandTotal"></p>
+        </section>
+    </div>
+</body>
+</html>
