@@ -5,18 +5,18 @@ document.getElementById("quantity").addEventListener("keypress", (event) => {
     }
 })
 let totalPrice = 0;
+const input = document.getElementById("barcode");
+const quan = document.getElementById("quantity");
+const grandPrice = document.getElementById("grandTotal");
+const total = document.getElementById("total");
+let uniqueId = 0;
+//container is the table
+const container = document.getElementById("table");
 
 //create an object to check existing item, and only store the item name with the value of quantity
 let checkExistedItem = {};
 
 function addNewItem(){
-    const input = document.getElementById("barcode");
-    const quan = document.getElementById("quantity");
-    const grandPrice = document.getElementById("grandTotal");
-    const total = document.getElementById("total");
-
-    //container is the table
-    const container = document.getElementById("table");
 
     const item = {
         "689145740844" : {
@@ -104,11 +104,12 @@ function addNewItem(){
                     //go to that row
                     const existedRow = container.rows[i];
                     //go to the quantity cell and change it to the new quantity value
-                    existedRow.cells[2].innerText = newQuantity;
+                    existedRow.cells[2].innerText = parseInt(existedRow.cells[2].innerText) + newQuantity;
                     //calculating the new total after changing the quantity
-                    const newTotal = newQuantity * itemPrice;
+                    const newTotal = parseInt(existedRow.cells[2].innerText) * itemPrice;
                     total.innerText = "Total: $" + newTotal.toFixed(2);
-                    totalPrice = itemPrice * quan.value;
+                    // totalPrice = itemPrice * quan.value;
+                    totalPrice = newTotal;
                 }
             }
             input.value = "";
@@ -119,10 +120,10 @@ function addNewItem(){
         const itemElement = tableRow.insertCell(0);
         const priceElement = tableRow.insertCell(1);
         const quantityElement = tableRow.insertCell(2);
-
+        const deleteElement = tableRow.insertCell(3);
+        uniqueId++;
         //the check out button
         let checkBtn = document.getElementById("checkOut");
-
 
         itemElement.innerText = itemName;
         itemElement.classList.add("contain");
@@ -133,6 +134,10 @@ function addNewItem(){
         quantityElement.innerText = quan.value;  
         quantityElement.classList.add("contain");
         
+        deleteElement.innerHTML = '<button id = `${uniqueId}` class = "delete">x</button>';
+        
+        //trying to make a delete button for each item
+
         //storing the total price for the grand total
         totalPrice += itemPrice * quan.value;
         total.innerText = "Total: $" + totalPrice.toFixed(2);
@@ -142,6 +147,14 @@ function addNewItem(){
             let grand = totalPrice + ( totalPrice * 0.0925);
             grandPrice.innerText = "Your grand total (including tax, 9.25%) is $" + grand.toFixed(2);
         };
+        document.getElementById("uniqueId").onclick = function(){
+            container.deleteRow(tableRow.rowIndex);
+            console.log(uniqueId);
+            uniqueId--;
+            totalPrice -= (itemPrice * quan.value);
+            total.innerText = "Total: $" + totalPrice.toFixed(2);
+            console.log(totalPrice);
+        }
         //after adding the new item, add it to the existing item for the next item to be checked
         checkExistedItem[itemName] = quan.value;
 
