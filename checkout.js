@@ -9,7 +9,7 @@ const input = document.getElementById("barcode");
 const quan = document.getElementById("quantity");
 const grandPrice = document.getElementById("grandTotal");
 const total = document.getElementById("total");
-let uniqueId = 0;
+
 //container is the table
 const container = document.getElementById("table");
 
@@ -121,7 +121,7 @@ function addNewItem(){
         const priceElement = tableRow.insertCell(1);
         const quantityElement = tableRow.insertCell(2);
         const deleteElement = tableRow.insertCell(3);
-        uniqueId++;
+
         //the check out button
         let checkBtn = document.getElementById("checkOut");
 
@@ -134,8 +134,7 @@ function addNewItem(){
         quantityElement.innerText = quan.value;  
         quantityElement.classList.add("contain");
         
-        deleteElement.innerHTML = '<button id = `${uniqueId}` class = "delete">x</button>';
-        
+        deleteElement.innerHTML = '<button class = "delete">x</button>';
         //trying to make a delete button for each item
 
         //storing the total price for the grand total
@@ -147,14 +146,22 @@ function addNewItem(){
             let grand = totalPrice + ( totalPrice * 0.0925);
             grandPrice.innerText = "Your grand total (including tax, 9.25%) is $" + grand.toFixed(2);
         };
-        document.getElementById("uniqueId").onclick = function(){
-            container.deleteRow(tableRow.rowIndex);
-            console.log(uniqueId);
-            uniqueId--;
-            totalPrice -= (itemPrice * quan.value);
-            total.innerText = "Total: $" + totalPrice.toFixed(2);
-            console.log(totalPrice);
-        }
+        deleteElement.addEventListener('click', function (event) {
+            if (event.target.classList.contains('delete')) {
+                const row = event.target.closest('tr');
+                const itemName = row.cells[0].innerText;
+                const itemPrice = parseFloat(row.cells[1].innerText.substring(1));
+                const itemQuantity = parseFloat(row.cells[2].innerText);
+        
+                container.deleteRow(row.rowIndex);
+        
+                totalPrice -= itemPrice * itemQuantity;
+                total.innerText = "Total: $" + totalPrice.toFixed(2);
+        
+                delete checkExistedItem[itemName];
+            }
+        });
+
         //after adding the new item, add it to the existing item for the next item to be checked
         checkExistedItem[itemName] = quan.value;
 
